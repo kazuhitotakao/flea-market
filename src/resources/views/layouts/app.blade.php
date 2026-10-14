@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coachtechフリマ</title>
+    <title>フリマアプリ</title>
     <link href="{{ asset('css/sanitize.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/common.css') }}" rel="stylesheet">
@@ -23,12 +23,12 @@
             <div class="header__utilities">
                 @auth
                     <a class="header__logo" href="/">
-                        <img class="header__logo--image" src="{{ asset('images/logo.svg') }}" alt="Logo">
+                        <img class="header__logo--image" src="{{ asset('images/logo.svg') }}" alt="フリマアプリ">
                     </a>
                 @endauth
                 @guest
                     <a class="header__logo" href="/guest">
-                        <img class="header__logo--image" src="{{ asset('images/logo.svg') }}" alt="Logo">
+                        <img class="header__logo--image" src="{{ asset('images/logo.svg') }}" alt="フリマアプリ">
                     </a>
                 @endguest
                 @php
