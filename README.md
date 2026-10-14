@@ -3,6 +3,8 @@
 商品の出品・検索・購入と、管理者によるユーザー・コメント管理を実装したフリマアプリです。
 スクールの学習課題として制作し、Laravelでの認証、リレーショナルデータベース設計、画像アップロード、Stripeのテスト決済を学びました。
 
+**現在の公開状況**：現在はAWS環境に接続しておらず、公開ドメイン・デモURLはありません。画面や機能は本READMEのスクリーンショットで確認でき、動作を試す場合は[環境構築](#環境構築)の手順でローカル環境を起動できます。
+
 ![商品一覧：画像・価格・お気に入りボタンを表示](docs/images/item-list.jpg)
 
 [画面紹介](#画面紹介) · [主な機能](#主な機能) · [実装のポイント](#実装のポイント) · [データベース設計](#データベース設計) · [環境構築](#環境構築)
@@ -70,7 +72,7 @@
 | 開発環境 | Docker Compose、MySQL 8.0.35、nginx 1.22.1、MailHog、phpMyAdmin |
 | 決済・画像処理 | Stripe（テスト環境）、Intervention Image |
 | テスト | PHPUnit（Featureテスト） |
-| AWSでの構築に使用 | EC2、RDS、S3 |
+| 過去に構築したAWS環境（現在は非公開） | EC2、RDS、S3 |
 
 バージョン・依存関係は[composer.lock](src/composer.lock)、[package-lock.json](src/package-lock.json)、[Docker構成](docker-compose.yml)を参照してください。
 
