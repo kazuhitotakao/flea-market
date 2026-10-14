@@ -1,135 +1,202 @@
-## 【フリマアプリ（flea-market）】  
-　～トップ画面イメージ～  
- <img width="700" alt="トップページ" src="https://github.com/user-attachments/assets/abc1df29-e3a2-43db-8d8d-e7dfa1f41212">
+# フリマアプリ（flea-market）
 
-## 【制作した目的】  
-    スクールの学習課題として、商品の出品から購入までの流れを実装するため。  
-  
-## 【機能一覧】  
-#### 　・会員登録機能  
-#### 　・ログイン機能  
-#### 　・ログアウト機能  
-#### 　・商品一覧・詳細表示  
-#### 　・商品検索機能  
-#### 　・商品お気に入り登録機能  
-#### 　・商品コメント機能  
-#### 　・商品購入機能  
-#### 　・支払方法・配送先住所変更機能  
-       支払い方法を「クレジットカード」「コンビニ」「銀行振込」から選択・変更が可能。  
-       また、商品の配送先変更も可能。
-#### 　・商品出品機能  
-       出品時に複数枚の画像をアプロードできる。また、サムネイル画像も選択可能。  
-       ※出品時のカテゴリー項目・ブランド項目  
-         それぞれテーブルで管理しているが、現時点では最低限のものにしている。  
-#### 　・マイページ機能（出品した商品・購入した商品がわかる）  
-#### 　・プロフィール変更機能（マイページからユーザーのプロフィールを編集することができる）
-       ユーザーアイコン用の画像を複数枚アプロード可能。アプロードした中から１枚選択してアイコン画像として表示。
-#### 　・権限設定  
-       管理者・一般ユーザーに権限を分けている。  
-       またゲストユーザー（権限なし）には商品一覧・詳細表示・検索機能を許可している。  
-#### 　・コメント削除機能（管理者）  
-       全コメントの一覧表示ができ、条件で抽出が可能。一括削除にも対応。   
-#### 　・ユーザー削除機能・メール送信機能（管理者）  
-       一般ユーザーを削除する機能を管理者へ付与。  
-       またユーザーに対して、個別・一括でのメール送信機能を実装。  
-#### 　・決済機能（Stripeを利用）  
-       アプリ内で決済機能を設けている。  
-       ※Stripeのテスト環境で構築しているため、テスト時のクレジットカードは下記の公式ページのテスト用カードを使用すること。  
-         テストカード：https://docs.stripe.com/testing?locale=ja-JP  
-  
-## 【使用技術（実行環境）】  
-#### ・開発環境（Docker環境）  
-    PHP		8.1.30  
-    Laravel		8.83.27  
-    MySQL		8.0.35  
-    nginx		1.22.1  
-    MailHog（メールサーバー）　  
-  
-#### ・本番環境（AWS環境）  
-    EC2（バックエンド）  
-    PHP		8.1.29  
-    Laravel		8.83.27  
-    nginx		1.22.1  
-    RDS（データベース）  
-    S3（ストレージ）  
-    Gmail（メールサーバーとして使用）   
-  
-## 【テーブル設計図】  
- <img width="926" alt="テーブル設計図完成" src="https://github.com/user-attachments/assets/e2f39d77-d40e-45c5-9dc8-1cc6c69f87c7">  
-  
-## 【ER図】  
- <img width="751" alt="flea_ERまとめ" src="https://github.com/user-attachments/assets/f5aa6ce8-bd23-4df0-9730-f2d1518ed090">  
-  
-## 【環境構築】  
-### ※開発環境のみ記載※  
-### Dockerビルド  
-    １　任意のディレクトリでリポジトリをクローン  
-        git clone git@github.com:kazuhitotakao/flea-market.git  
-    ２  flea-marketディレクトリが作成されているのでflea-marketディレクトリに移動  
-        cd flea-market  
-    ３　DockerDesktopアプリを立ち上げる  
-    ４　docker compose up -d --build  
-   
-### Laravel環境構築   
-    １　【phpコンテナに入り】各種パッケージのインストール  
-        docker compose exec php bash  
-        composer install  
-    ２　phpコンテナ内から抜けて、srcディレクリに移動し、「.env」ファイルを作成
-        exit
-        cd src  
-        cp .env.example .env  
-    ３　.envファイルに以下の環境変数を修正・追加  
-       APP_NAME=flea-market  
-       DB_HOST=mysql  
-       DB_DATABASE=laravel_db  
-       DB_USERNAME=laravel_user  
-       DB_PASSWORD=laravel_pass  
-       MAIL_USERNAME=user  
-       MAIL_PASSWORD=password  
-       MAIL_FROM_ADDRESS=info@example.com  
+商品の出品・検索・購入と、管理者によるユーザー・コメント管理を実装したフリマアプリです。
+スクールの学習課題として制作し、Laravelでの認証、リレーショナルデータベース設計、画像アップロード、Stripeのテスト決済を学びました。
 
-     ※Stripe決済機能のために追加（ = 以下を各個人で設定）  
-       STRIPE_PUBLIC_KEY=  
-       STRIPE_SECRET_KEY=  
-      （このサイトに登録し、KEYを取得する）公式サイト：https://dashboard.stripe.com/  
-   
-    ４　【phpコンテナに入り】アプリケーションキーの作成  
-       docker compose exec php bash  
-       php artisan key:generate  
-  
-    ５　【phpコンテナ内】マイグレーションの実行  
-       php artisan migrate:fresh  
-  
-    ６　【phpコンテナ内】シーディングの実行  
-       php artisan db:seed  
-       ※初期データの作成（デモ用のデータ）  
+![商品一覧：画像・価格・お気に入りボタンを表示](docs/images/item-list.jpg)
 
-    ７　【phpコンテナ内】パーミッション設定  
-       chmod -R 777 /var/www/storage  
+[画面紹介](#画面紹介) · [主な機能](#主な機能) · [実装のポイント](#実装のポイント) · [データベース設計](#データベース設計) · [環境構築](#環境構築)
 
-    ８　【phpコンテナ内】シンボリックリンク設定  
-       php artisan storage:link  
-   
-## 【URL】  
-   　【test用ユーザー】  
-　　　`管理者　　　　→　Email：admin@sample.com　　 Password：password`  
-　　　`一般ユーザー　→　Email：user1@sample.com　　 Password：password`  
-　　　`一般ユーザー　→　Email：user2@sample.com　　 Password：password`  
-　　　`一般ユーザー　→　Email：user3@sample.com　　 Password：password`  
-   
-#### ・開発環境  
-    開発環境：http://localhost/  
-    phpMyAdmin：http://localhost:8080/	  
-    MailHog：http://localhost:8025/  
-    
-#### ・本番環境
-    デプロイ済のURL：http://35.79.89.150/  
-    
-## 【その他】  
-#### ・開発環境と本番環境の切り分けについて  
-    .env.development（開発環境） .env.production（本番環境）で切り分けを実施  
-    ※個人情報が記載されているため、git.ignoreに記載し、リモートリポジトリへはpushしていない  
-    
-#### ・開発環境と本番環境での主な相違点  
-    開発環境ではDockerで環境構築を行い、メールサーバーをMailHogとしている。  
-    本番環境では、AWSで環境構築を行い、メールサーバーをGmailとしている。  
+## 画面紹介
+
+現在のコードと同梱のシードデータを使い、ローカル環境で撮影した画面です。
+
+### 商品詳細
+
+複数の商品画像、価格、ブランド、カテゴリー、商品の状態を表示します。
+
+![商品詳細：画像ギャラリーと商品情報](docs/images/item-detail.jpg)
+
+<details>
+<summary>出品フォーム・管理画面・スマートフォン表示を見る</summary>
+
+### 商品の出品
+
+複数画像のアップロード、サムネイルの選択、カテゴリー・状態・ブランド・価格の設定に対応しています。
+
+![商品出品フォーム](docs/images/item-create.jpg)
+
+### 管理者のユーザー一覧
+
+ユーザー検索、削除、個別・一括メール送信の操作をまとめています。
+表示しているアカウントはシードデータのデモユーザーです。
+
+![管理者のユーザー一覧](docs/images/admin-users.jpg)
+
+### スマートフォン表示
+
+商品一覧と詳細は画面幅に応じてレイアウトが切り替わります。以下はゲスト閲覧時の画面です。
+
+<img src="docs/images/item-list-mobile.jpg" alt="スマートフォンの商品一覧" width="300">
+<img src="docs/images/item-detail-mobile.jpg" alt="スマートフォンの商品詳細" width="300">
+
+</details>
+
+## 主な機能
+
+| 利用者 | 機能 |
+| --- | --- |
+| ゲスト | 商品一覧・詳細の閲覧、商品名・ブランド・カテゴリーによる検索 |
+| 会員 | 会員登録・ログイン・ログアウト、お気に入り、コメント、商品出品、商品購入 |
+| 会員 | 支払方法・配送先の変更、出品・購入履歴の閲覧、プロフィール・アイコンの編集 |
+| 管理者 | ユーザー・コメントの検索と削除、コメントの一括削除、個別・一括メール送信 |
+
+支払方法はクレジットカード・コンビニ・銀行振込から選択できます。クレジットカード決済はStripeのテスト環境を使用しています。
+
+## 実装のポイント
+
+- **認証と権限**：Laravel Fortifyで認証を実装し、Spatie Laravel Permissionで管理者・一般ユーザーの権限を管理。管理者用ルートに`role:admin`ミドルウェアを設定しています。([ルート定義](src/routes/web.php))
+- **商品検索**：商品名に加え、関連するブランド・カテゴリー・親カテゴリーを検索対象にしています。([Itemモデル](src/app/Models/Item.php))
+- **複数画像の管理**：商品・ユーザーの画像を別テーブルで管理し、選択した画像IDをサムネイル・アイコンとして参照。画像のリサイズ処理をサービスにまとめています。([画像サービス](src/app/Services/ImageService.php))
+- **購入履歴の保存**：購入者・出品者・支払方法詳細・支払金額を記録し、購入した商品を販売済みに更新します。([購入処理](src/app/Http/Controllers/PurchaseController.php))
+- **データの整合性**：カテゴリーと商品の中間テーブル、お気に入りテーブルに複合UNIQUE制約を設定しています。([マイグレーション](src/database/migrations))
+
+## 使用技術
+
+| 区分 | 技術 |
+| --- | --- |
+| バックエンド | PHP 8.1、Laravel 8.83.27、Laravel Fortify、Spatie Laravel Permission |
+| フロントエンド | Blade、HTML / CSS、JavaScript、Bootstrap、Laravel Mix |
+| 開発環境 | Docker Compose、MySQL 8.0.35、nginx 1.22.1、MailHog、phpMyAdmin |
+| 決済・画像処理 | Stripe（テスト環境）、Intervention Image |
+| テスト | PHPUnit（Featureテスト） |
+| AWSでの構築に使用 | EC2、RDS、S3 |
+
+バージョン・依存関係は[composer.lock](src/composer.lock)、[package-lock.json](src/package-lock.json)、[Docker構成](docker-compose.yml)を参照してください。
+
+## データベース設計
+
+マイグレーションの定義から作成した、主要テーブルの関係です。画像・ブランド・状態・住所・支払方法・権限管理を含む詳細は[ER図とテーブル定義](docs/database.md)にまとめています。
+
+```mermaid
+erDiagram
+    users ||--o{ items : "出品"
+    users ||--o{ purchases : "購入者 buyer_id"
+    users ||--o{ purchases : "出品者 seller_id"
+    items ||--o{ purchases : "購入履歴"
+    users ||--o{ comments : "投稿"
+    items ||--o{ comments : "コメント"
+    users ||--o{ favorites : "お気に入り"
+    items ||--o{ favorites : "お気に入り対象"
+    items ||--o{ category_item : "分類"
+    categories ||--o{ category_item : "カテゴリー"
+    categories |o--o{ categories : "親カテゴリー parent_id"
+```
+
+## 環境構築
+
+Docker DesktopとGitを使用します。以下は初回の開発環境構築手順です。
+
+### 1. リポジトリの取得と設定
+
+```bash
+git clone https://github.com/kazuhitotakao/flea-market.git
+cd flea-market
+cp src/.env.example src/.env
+```
+
+`src/.env`の以下の項目を設定します。DBの値は`docker-compose.yml`の開発用設定に対応しています。
+
+```dotenv
+APP_NAME=flea-market
+APP_ENV=local
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=info@example.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+### 2. コンテナの起動と初期データの作成
+
+```bash
+docker compose up -d --build
+docker compose exec php composer install
+docker compose exec php php artisan key:generate
+docker compose exec php php artisan migrate --seed
+docker compose exec php php artisan storage:link
+```
+
+MySQLの起動直後に接続エラーが出た場合は、起動完了後にマイグレーションを再実行してください。
+`storage`と`bootstrap/cache`はPHPの実行ユーザーが書き込める権限にします。
+表示用のCSS・JavaScriptは`src/public`に含まれています。
+
+### 3. アプリを開く
+
+| サービス | URL |
+| --- | --- |
+| アプリ（ログイン） | http://localhost/login |
+| ゲストの商品一覧 | http://localhost/guest |
+| phpMyAdmin | http://localhost:8080 |
+| MailHog（開発用メール確認） | http://localhost:8025 |
+
+### デモアカウント
+
+初回のシーディングで以下のアカウントを作成します。パスワードはすべて`password`です。
+
+| 権限 | メールアドレス |
+| --- | --- |
+| 管理者 | admin@sample.com |
+| 一般ユーザー | user1@sample.com |
+| 一般ユーザー | user2@sample.com |
+| 一般ユーザー | user3@sample.com |
+
+商品・カテゴリー・ブランド・商品画像もシードデータに含まれているため、出品前でも一覧と詳細を確認できます。
+
+### Stripeのテスト決済
+
+クレジットカード決済を試す場合は、`src/.env`に自分のStripeテスト用キーを追加します。
+
+```dotenv
+STRIPE_PUBLIC_KEY=
+STRIPE_SECRET_KEY=
+```
+
+テスト用カードは[Stripe公式ドキュメント](https://docs.stripe.com/testing?locale=ja-JP)を参照してください。決済キーの設定は、商品閲覧やログインの確認には不要です。
+
+## テスト
+
+認証が必要な各画面や、検索・出品・購入・管理機能のFeatureテストを[src/tests/Feature](src/tests/Feature)に置いています。
+既存のテスト設定はMySQLの`demo_test`データベースを使用します。
+
+```bash
+docker compose exec mysql mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS demo_test;'
+docker compose exec php php artisan test tests/Feature
+```
+
+## ディレクトリ構成
+
+```text
+docker/                     nginx・PHP・MySQLの開発用設定
+docs/                       ER図・テーブル定義・画面画像
+src/app/Http/Controllers/    各画面・操作の処理
+src/app/Http/Requests/       入力値の検証
+src/app/Models/             データ取得・保存とリレーション
+src/app/Services/           共通の画像処理
+src/database/               マイグレーション・シーダー・ファクトリー
+src/resources/views/        Bladeテンプレート
+src/routes/                 ルート定義
+src/tests/Feature/          機能テスト
+```
