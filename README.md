@@ -1,9 +1,9 @@
-## 【coachtechフリマ（メルカリ風フリマアプリ）】  
+## 【フリマアプリ（flea-market）】  
 　～トップ画面イメージ～  
  <img width="700" alt="トップページ" src="https://github.com/user-attachments/assets/abc1df29-e3a2-43db-8d8d-e7dfa1f41212">
 
 ## 【制作した目的】  
-    『coachtechブランドのアイテムを出品したい』というクライアントの要望に応えるため。  
+    スクールの学習課題として、商品の出品から購入までの流れを実装するため。  
   
 ## 【機能一覧】  
 #### 　・会員登録機能  
@@ -79,7 +79,7 @@
         cd src  
         cp .env.example .env  
     ３　.envファイルに以下の環境変数を修正・追加  
-       APP_NAME=coachtech-flea  
+       APP_NAME=flea-market  
        DB_HOST=mysql  
        DB_DATABASE=laravel_db  
        DB_USERNAME=laravel_user  
